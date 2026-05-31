@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
 /* === TRUE BESPOKE REDESIGN: AI TRADER FOREX ===
-   Aesthetic: Premium Discord / Developer Community
-   Vibe: Slate background, Indigo/Purple gradients, sleek glassmorphism === */
+   Aesthetic: Wall Street Trust / Financial Institution
+   Vibe: Navy Blue, Gold, Security, Reliability === */
 
 @theme {
-  --color-primary: #6366F1; /* Indigo 500 */
-  --color-primary-dark: #4F46E5;
-  --color-surface: #0F172A; /* Slate 900 */
-  --color-neutral: #1E293B; /* Slate 800 */
-  --color-border: #334155;  /* Slate 700 */
-  --color-muted: #94A3B8;   /* Slate 400 */
-  --color-text: #F8FAFC;    /* Slate 50 */
+  --color-primary: #0A192F; /* Deep Navy Blue */
+  --color-primary-dark: #020C1B;
+  --color-accent: #D4AF37;  /* Metallic Gold */
+  
+  --color-surface: #F8FAFC;
+  --color-neutral: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-muted: #64748B;
+  --color-text: #0F172A;
 
-  /* Modern Web3 / Community Typography */
-  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  /* Classic Serif for Headers, Clean Sans for data */
+  --font-serif: 'Merriweather', serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
