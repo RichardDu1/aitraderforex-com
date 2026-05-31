@@ -1,0 +1,70 @@
+---
+title: "Real-Time Prop Firm Rule Change Detection via NLP on Discord & Telegram"
+description: "Automate monitoring of prop firm Discord and Telegram channels using NLP to instantly detect rule changes, ensuring you never miss critical updates that affect your challenge accounts."
+targetRole: ["prop-firm-challenge-trader"]
+targetIntent: ["rule-change-detection"]
+difficulty: "Intermediate"
+setupTime: "2-3 Hours"
+costEstimate: "$0 - $50/mo"
+roi: "Saves 5+ hours/week and prevents rule violations"
+toolsUsed: ["discord-bot","telegram-bot","make","openai-api","google-sheets"]
+---
+
+## Overview
+
+This workflow uses NLP to monitor prop firm Discord and Telegram channels for rule changes. When a message containing keywords like "rule update", "new rule", or "change in" is detected, it's analyzed by GPT-4 to extract the change and logged to Google Sheets for review.
+
+## Prerequisites
+
+- A Discord bot token (create via Discord Developer Portal)
+- A Telegram bot token (create via BotFather)
+- OpenAI API key
+- Make (formerly Integromat) account
+- Google account for Sheets
+
+## Step 1: Set Up Discord Bot
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications), create a new application, then a bot.
+2. Copy the bot token.
+3. Enable "Message Content Intent" under Bot settings.
+4. Invite the bot to your target server with `read_messages` and `send_messages` permissions.
+
+## Step 2: Set Up Telegram Bot
+
+1. Open Telegram, search for `@BotFather`, and create a new bot.
+2. Copy the API token.
+3. Add the bot to your target channel as an administrator with "Read Messages" permission.
+
+## Step 3: Create Make Scenario
+
+1. Log in to [Make](https://www.make.com/) and create a new scenario.
+2. Add a **Discord** module: "Watch Messages" (select your bot, channel, and set limit to 1).
+3. Add a **Telegram** module: "Watch Updates" (select your bot, set update type to "message").
+4. Add a **Router** to handle both triggers.
+5. For each path, add a **Text Parser** module to check for keywords: `rule`, `update`, `change`, `new`, `policy`. Use regex: `/(rule|update|change|new|policy)/i`.
+6. If match, add an **OpenAI** module: "Create Completion" with model `gpt-4`, prompt: `"Extract the prop firm rule change from this message: {{message.text}}. Output as JSON with fields: firm, rule, action, effective_date, details."`
+7. Add a **Google Sheets** module: "Add Row" to a sheet with columns: Timestamp, Firm, Rule, Action, Effective Date, Details, Source.
+8. Set the scenario to run every 1 minute.
+
+## Step 4: Test and Deploy
+
+1. Send a test message in Discord or Telegram: "FTMO rule update: maximum daily loss changed to 5% effective immediately."
+2. Check Google Sheets for the extracted data.
+3. Adjust keywords or prompt as needed.
+
+## Best Practices
+
+- Monitor multiple channels by adding more Discord/Telegram modules.
+- Use a dedicated Google Sheet per prop firm.
+- Set up alerts (email/SMS) when a critical rule change is detected.
+- Review extracted data daily for accuracy.
+
+## Troubleshooting
+
+- **Bot not receiving messages**: Ensure intents are enabled and bot has proper permissions.
+- **OpenAI errors**: Check API key and usage limits.
+- **Make scenario fails**: Verify module connections and data formats.
+
+## Conclusion
+
+This automated NLP pipeline keeps you ahead of prop firm rule changes, reducing manual monitoring and ensuring compliance. Adapt the keyword list and GPT prompt to your specific firms.

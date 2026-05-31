@@ -1,0 +1,62 @@
+[
+  {
+    "topic": "Automating Daily Equity Curve Smoothing with AI-Driven Lot Size Adjustments for Prop Firm Challenges",
+    "role": "prop-firm-challenge-trader",
+    "intent": "maintain-consistent-growth",
+    "status": "completed"
+  },
+  {
+    "topic": "Using LLMs to Parse and Summarize Prop Firm Rulebooks into Actionable Risk Parameters",
+    "role": "prop-firm-challenge-trader",
+    "intent": "compliance-automation",
+    "status": "completed"
+  },
+  {
+    "topic": "AI-Powered Trade Journaling with Sentiment Analysis to Identify Emotional Patterns Causing Rule Breaks",
+    "role": "prop-firm-challenge-trader",
+    "intent": "psychology-monitoring",
+    "status": "completed"
+  },
+  {
+    "topic": "Automated VPS Latency Monitoring and Failover Triggering Using Machine Learning Predictions",
+    "role": "forex-automation-specialist",
+    "intent": "latency-optimization",
+    "status": "completed"
+  },
+  {
+    "topic": "Generating Synthetic Historical Ticks from News Events to Backtest Prop Firm Strategies Under Stress",
+    "role": "prop-firm-challenge-trader",
+    "intent": "stress-testing",
+    "status": "completed"
+  },
+  {
+    "topic": "AI-Based Trade Exit Optimizer That Adjusts Take-Profit Levels to Meet Maximum Daily Loss Rules",
+    "role": "prop-firm-challenge-trader",
+    "intent": "risk-management",
+    "status": "completed"
+  },
+  {
+    "topic": "Automating Prop Firm Account Rotation Across Brokers Using IP Rotation and AI Scheduling",
+    "role": "forex-automation-specialist",
+    "intent": "account-diversification",
+    "status": "completed"
+  },
+  {
+    "topic": "Using NLP on Discord and Telegram Channels to Extract Real-Time Prop Firm Rule Changes",
+    "role": "prop-firm-challenge-trader",
+    "intent": "rule-change-detection",
+    "status": "completed"
+  },
+  {
+    "topic": "AI-Driven Drawdown Recovery Mode That Reduces Lot Sizes and Targets Based on Remaining Challenge Days",
+    "role": "prop-firm-challenge-trader",
+    "intent": "drawdown-recovery",
+    "status": "completed"
+  },
+  {
+    "topic": "Automated Compliance Report Generator for Prop Firm Audits Using Trade Log Analysis and LLM Summarization",
+    "role": "forex-automation-specialist",
+    "intent": "audit-automation",
+    "status": "pending"
+  }
+]

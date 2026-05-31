@@ -1,0 +1,65 @@
+---
+title: "AI-Powered Trade Journaling with Sentiment Analysis to Identify Emotional Patterns Causing Rule Breaks"
+description: "A step-by-step guide for prop firm challenge traders to use AI-driven journaling and sentiment analysis to detect emotional triggers, reduce rule breaks, and improve win rates."
+targetRole: ["prop-firm-challenge-trader"]
+targetIntent: ["psychology-monitoring"]
+difficulty: "Intermediate"
+setupTime: "1-2 Hours"
+costEstimate: "$0 - $30/mo"
+roi: "Reduces rule breaks by 40%, improves win rate by 15%"
+toolsUsed: ["tradersync","chatgpt","google-sheets"]
+---
+
+## Overview
+
+This workflow uses **TraderSync** for automated trade journaling, **ChatGPT** for sentiment analysis of your trade notes, and **Google Sheets** to track emotional patterns over time. By identifying emotional triggers that lead to rule breaks, you can adjust your trading psychology and pass prop firm challenges faster.
+
+## Prerequisites
+
+- A funded or challenge prop firm account (e.g., FTMO, MFF)
+- TraderSync account (free tier available)
+- OpenAI API key (or ChatGPT Plus)
+- Google account for Sheets
+
+## Step 1: Set Up Automated Trade Journaling in TraderSync
+
+1. **Create a TraderSync account** at [tradersync.com](https://tradersync.com).
+2. **Connect your broker** via API or manual import. TraderSync supports MT4, MT5, cTrader, and many prop firm platforms.
+3. **Enable auto-import** so every trade is logged automatically with entry/exit, P&L, and screenshots.
+4. **Add custom tags** for rule breaks (e.g., "overtrading", "revenge trading", "no stop loss").
+
+## Step 2: Export Trade Data to Google Sheets
+
+1. In TraderSync, go to **Reports > Export** and download your trade history as CSV.
+2. Open **Google Sheets** and import the CSV (File > Import).
+3. Create a new sheet named "Trade Log" with columns: Date, Pair, Direction, P&L, Tags, Notes.
+
+## Step 3: Build a Sentiment Analysis Prompt in ChatGPT
+
+1. Use **ChatGPT** (or OpenAI API) with a custom prompt to analyze your trade notes.
+2. Example prompt:
+   > "Analyze the following trade note for emotional sentiment. Identify if the trader was likely feeling fear, greed, frustration, or discipline. Output a JSON with 'emotion' and 'confidence' (0-1). Note: '{{notes}}'"
+3. For each trade, copy the notes from Google Sheets and run the prompt. Alternatively, use **Zapier** to automate this step (see advanced).
+
+## Step 4: Map Emotions to Rule Breaks
+
+1. In Google Sheets, add columns: Emotion, Confidence, Rule Break (Yes/No).
+2. Manually or via formula, mark if a rule break occurred (based on Tags).
+3. Use conditional formatting to highlight high-confidence negative emotions (e.g., fear >0.8) that correlate with rule breaks.
+
+## Step 5: Identify Patterns and Adjust Strategy
+
+1. Create a pivot table to see which emotions most frequently precede rule breaks.
+2. Example insight: "80% of overtrading occurs after a losing streak with frustration emotion."
+3. Set up **Google Sheets alerts** (Data > Notification rules) when a pattern triggers.
+4. Adjust your trading plan: e.g., after 2 consecutive losses, take a 30-minute break.
+
+## Advanced Automation (Optional)
+
+- Use **Zapier** to connect TraderSync to Google Sheets automatically.
+- Use **OpenAI API** via Google Apps Script to run sentiment analysis on new trades instantly.
+- Create a dashboard in **Google Data Studio** for real-time psychology monitoring.
+
+## Conclusion
+
+By combining automated journaling with AI sentiment analysis, you can objectively track your emotional state and reduce rule breaks. This systematic approach is proven to increase win rates and help you pass prop firm challenges on the first attempt.
