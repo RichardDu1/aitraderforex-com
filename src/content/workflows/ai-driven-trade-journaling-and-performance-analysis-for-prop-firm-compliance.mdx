@@ -1,0 +1,92 @@
+---
+title: "AI-Driven Trade Journaling and Performance Analysis for Prop Firm Compliance"
+description: "Automate trade journaling and performance analysis using AI to meet prop firm compliance requirements, track key metrics, and optimize trading strategies."
+targetRole: ["prop-firm-trader"]
+targetIntent: ["analyze-performance"]
+difficulty: "Intermediate"
+setupTime: "60 Minutes"
+costEstimate: "$0 - $50/mo"
+roi: "Saves 10 hours/week and reduces compliance risk"
+toolsUsed: ["tradervue","chatgpt","google-sheets","zapier"]
+---
+
+## AI-Driven Trade Journaling and Performance Analysis for Prop Firm Compliance
+
+This guide walks you through setting up an automated trade journaling and performance analysis system using AI to ensure prop firm compliance and improve your trading performance.
+
+### Prerequisites
+- A prop firm trading account (e.g., FTMO, MyForexFunds)
+- Access to your trading platform (MetaTrader 4/5, cTrader, etc.)
+- A Google account (for Google Sheets)
+- A Zapier account (free tier available)
+- An OpenAI API key (or ChatGPT Plus subscription)
+
+### Step 1: Set Up Trade Export from Your Platform
+
+Most trading platforms allow you to export trade history as CSV or via API. For this guide, we'll use MetaTrader 4/5.
+
+1. Open your trading platform and navigate to the **Account History** tab.
+2. Right-click and select **Save as Detailed Report** or **Export**.
+3. Save the file as CSV to a dedicated folder (e.g., `C:\\Trades\\`).
+
+Alternatively, use a tool like **TradeVue** to automatically sync trades via API.
+
+### Step 2: Create a Google Sheets Dashboard
+
+Create a Google Sheets workbook with the following sheets:
+
+- **RawTrades**: Columns for Date, Pair, Direction, Entry, Exit, Lots, P&L, R:R, etc.
+- **Metrics**: Calculated fields for win rate, average R:R, max drawdown, Sharpe ratio, etc.
+- **Compliance**: Rules from your prop firm (e.g., max daily loss, max drawdown, minimum trading days).
+
+Use Google Sheets formulas to auto-calculate metrics. For example:
+- Win Rate: `=COUNTIF(RawTrades!G:G,">0")/COUNTA(RawTrades!G:G)`
+- Max Drawdown: Use a script or array formula to track peak-to-trough.
+
+### Step 3: Automate Trade Import with Zapier
+
+Create a Zap that triggers when a new CSV file is added to your folder (using Dropbox or Google Drive) and appends rows to your RawTrades sheet.
+
+1. **Trigger**: New File in Folder (Dropbox/Google Drive)
+2. **Action**: Add Row to Google Sheets (RawTrades sheet)
+3. Map CSV columns to sheet columns.
+
+Test the Zap to ensure trades are imported correctly.
+
+### Step 4: AI-Powered Performance Analysis with ChatGPT
+
+Use ChatGPT (via API or web interface) to analyze your trade data and generate insights.
+
+**Option A: Manual Analysis**
+- Copy your Metrics sheet data into ChatGPT with a prompt like:
+  "Analyze my trading performance: win rate 65%, average R:R 1:2, max drawdown 8%, Sharpe ratio 1.5. Identify strengths, weaknesses, and compliance risks."
+
+**Option B: Automated Analysis with API**
+- Use a Python script (or Zapier Code step) to send your Metrics data to OpenAI API and receive a structured analysis.
+- Example prompt:
+  ```
+  You are a trading performance analyst. Given the following metrics, provide a JSON output with fields: strengths, weaknesses, compliance_risks, recommendations.
+  Metrics: {metrics_json}
+  ```
+- Store the analysis in a new sheet (Analysis).
+
+### Step 5: Compliance Monitoring
+
+Set up conditional formatting in Google Sheets to flag compliance violations:
+- Max Daily Loss: Highlight red if daily P&L exceeds -5%.
+- Max Drawdown: Highlight red if current drawdown > 10%.
+- Minimum Trading Days: Count days with trades and flag if below requirement.
+
+Use Google Apps Script to send email alerts when violations occur.
+
+### Step 6: Review and Iterate
+
+Weekly, review the AI-generated analysis and adjust your trading plan. Use the insights to improve your strategy and maintain prop firm compliance.
+
+### Troubleshooting
+- **CSV import fails**: Ensure column headers match exactly.
+- **API rate limits**: Use a queue or batch processing.
+- **Compliance rules change**: Update your Compliance sheet regularly.
+
+### Conclusion
+By automating trade journaling and leveraging AI for analysis, you save time, reduce errors, and stay compliant with prop firm rules. This system scales with your trading volume and adapts to different prop firms.

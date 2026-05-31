@@ -1,0 +1,97 @@
+---
+title: "VPS Health Monitoring and Auto-Failover for Prop Firm Bot Deployment"
+description: "Ensure 99.9% uptime for your prop firm trading bots with automated VPS health checks and instant failover to a backup server, minimizing latency and avoiding rule violations."
+targetRole: ["infrastructure-manager"]
+targetIntent: ["ensure-uptime"]
+difficulty: "Intermediate"
+setupTime: "2-3 Hours"
+costEstimate: "$30 - $100/mo"
+roi: "Prevents account loss from downtime; saves 5+ hours/week on manual monitoring"
+toolsUsed: ["uptimerobot","hetzner-vps","cloudflare","telegram-bot"]
+---
+
+## Overview
+
+This guide provides a step-by-step workflow to set up VPS health monitoring and automatic failover for prop firm trading bots. The system uses UptimeRobot to monitor your primary VPS, triggers a Telegram alert on failure, and automatically switches traffic to a backup VPS via Cloudflare load balancing. This ensures your bots remain online and compliant with prop firm rules.
+
+## Prerequisites
+
+- Two VPS instances (primary and backup) with identical bot setups (e.g., MT4/MT5, cTrader).
+- A domain managed by Cloudflare.
+- A Telegram bot token for notifications.
+- Basic familiarity with SSH, Linux commands, and Cloudflare DNS.
+
+## Step 1: Configure Primary and Backup VPS
+
+1. **Set up the primary VPS** (e.g., Hetzner CX21, $8/mo):
+   - Install your trading platform and bot.
+   - Ensure the bot starts automatically on boot (use systemd).
+   - Open required ports (e.g., 443 for webhooks).
+
+2. **Clone the setup to the backup VPS** (same specs, different IP).
+   - Use rsync or a configuration management tool like Ansible to keep both VPS in sync.
+   - Schedule a cron job to sync bot configs and logs every 5 minutes.
+
+## Step 2: Set Up UptimeRobot Monitoring
+
+1. Create a free UptimeRobot account.
+2. Add a new monitor for your primary VPS:
+   - Monitor Type: HTTP(s) or Ping.
+   - URL: `http://<primary-ip>:<port>/health` (create a simple health endpoint on your bot).
+   - Interval: 1 minute.
+3. Configure alert contacts:
+   - Add a Webhook alert to trigger a Telegram message (use Telegram Bot API).
+   - Example webhook URL: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage?chat_id=<CHAT_ID>&text=Primary+VPS+Down!`
+
+## Step 3: Implement Auto-Failover with Cloudflare
+
+1. **Add both VPS IPs to Cloudflare DNS**:
+   - Create an A record for your domain (e.g., `bot.yourdomain.com`) pointing to the primary VPS IP.
+   - Enable Cloudflare proxy (orange cloud) for DDoS protection and load balancing.
+
+2. **Set up Cloudflare Load Balancer**:
+   - Go to Traffic > Load Balancing.
+   - Create a load balancer with:
+     - Origin pools: Primary pool (primary VPS IP) and Backup pool (backup VPS IP).
+     - Health checks: Ping or HTTP to the same health endpoint.
+     - Steering: Set to "Off" (failover only).
+   - Attach the load balancer to your DNS record.
+
+3. **Configure failover rules**:
+   - Under Load Balancer settings, set the failover threshold (e.g., 2 consecutive health check failures).
+   - The load balancer will automatically route traffic to the backup pool when the primary is unhealthy.
+
+## Step 4: Automate Failover Actions via Script
+
+1. **Create a failover script on a third monitoring server** (or use a free tier cloud function):
+   - Use Python with `requests` to call Cloudflare API to update DNS records if load balancer fails.
+   - Example: Change the A record to backup IP when primary is down.
+
+2. **Deploy the script as a cron job** (every minute):
+   - Check UptimeRobot status via API.
+   - If primary is down for >2 minutes, execute failover.
+
+## Step 5: Test the Failover
+
+1. Simulate a primary VPS failure by stopping the bot or shutting down the VPS.
+2. Verify:
+   - Telegram alert received within 1 minute.
+   - Cloudflare load balancer switches to backup within 2 minutes.
+   - Bot continues trading without interruption.
+3. Restore primary VPS and ensure traffic switches back automatically.
+
+## Step 6: Monitor and Maintain
+
+- Regularly review UptimeRobot logs and Cloudflare analytics.
+- Keep both VPS updated with the same bot version.
+- Test failover monthly to ensure reliability.
+
+## Troubleshooting
+
+- **Failover not triggering**: Check health endpoint response, firewall rules, and Cloudflare load balancer settings.
+- **Telegram alerts not sending**: Verify bot token and chat ID.
+- **Latency increase after failover**: Ensure backup VPS is in the same region as primary.
+
+## Conclusion
+
+With this setup, your prop firm bots will experience minimal downtime, protecting your accounts from rule violations and maximizing profitability. The total cost is under $100/month, and the system requires minimal manual intervention.
