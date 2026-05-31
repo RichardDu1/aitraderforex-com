@@ -1,41 +1,36 @@
 @import "tailwindcss";
 
-/* === TRUE BESPOKE REDESIGN: AI TRADER FOREX ===
-   Aesthetic: Wall Street Trust / Financial Institution
-   Vibe: Navy Blue, Gold, Security, Reliability === */
-
 @theme {
-  --color-primary: #0A192F; /* Deep Navy Blue */
-  --color-primary-dark: #020C1B;
-  --color-accent: #D4AF37;  /* Metallic Gold */
+  --color-primary-500: #eab308;
+  --color-primary-600: #ca8a04;
+  --color-dark: #050505;
+  --color-card: #111111;
   
-  --color-surface: #F8FAFC;
-  --color-neutral: #FFFFFF;
-  --color-border: #E2E8F0;
-  --color-muted: #64748B;
-  --color-text: #0F172A;
+  --animate-blob: blob 10s infinite;
+  --animate-fade-in-up: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
-  /* Classic Serif for Headers, Clean Sans for data */
-  --font-serif: 'Merriweather', serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); opacity: 0.2; }
+    33% { transform: translate(40px, -60px) scale(1.1); opacity: 0.3; }
+    66% { transform: translate(-30px, 30px) scale(0.9); opacity: 0.1; }
+    100% { transform: translate(0px, 0px) scale(1); opacity: 0.2; }
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
-body { 
-  font-family: var(--font-sans); 
-  color: var(--color-text); 
-  background-color: var(--color-surface); 
-  line-height: 1.6;
+@utility animation-delay-2000 {
+  animation-delay: 2s;
 }
 
-h1, h2, h3, h4 { 
-  font-weight: 800;
-  letter-spacing: -0.03em;
+@utility animation-delay-4000 {
+  animation-delay: 4s;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #818CF8, #C084FC);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+body {
+  background-color: var(--color-dark);
+  color: #e2e8f0;
 }
