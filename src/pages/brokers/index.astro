@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allBrokers = await getCollection('brokers');
+const sortedBrokers = allBrokers.sort((a, b) => b.data.trustScore - a.data.trustScore);
+
+const pageTitle = 'Verified Brokers & Prop Firms Directory | AI Trader Forex';
+const pageDescription = 'Browse our complete directory of verified Forex Brokers and Prop Firms.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical="https://aitraderforex.com/brokers/"
+>
+  <main class="max-w-5xl mx-auto px-6 py-20 font-sans">
+    <header class="mb-12 border-b border-border pb-8">
+      <h1 class="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">Broker & Prop Firm Directory</h1>
+      <p class="text-lg text-muted">Complete list of audited trading platforms.</p>
+    </header>
+
+    <div class="bg-[#0a0a0a] rounded border border-border shadow-none overflow-hidden">
+      <div class="grid grid-cols-2 md:grid-cols-6 bg-surface border-b border-border text-xs uppercase tracking-widest font-bold text-muted p-4">
+        <div class="col-span-2">Platform</div>
+        <div class="hidden md:block text-center">Max Leverage</div>
+        <div class="hidden md:block text-center">Spreads</div>
+        <div class="text-center">Trust Score</div>
+        <div class="hidden md:block text-center">EA Friendly</div>
+      </div>
+      
+      <div class="divide-y divide-border">
+        {sortedBrokers.length > 0 ? sortedBrokers.map((broker) => (
+          <a href={`/en/brokers/${broker.id.split('/').pop()}`} class="grid grid-cols-2 md:grid-cols-6 p-4 md:p-6 items-center hover:bg-slate-50 transition-colors group">
+            <div class="col-span-2">
+              <h3 class="font-bold text-lg text-primary group-hover:text-accent transition-colors">{broker.data.title}</h3>
+              <span class="text-xs text-muted uppercase tracking-wider">{broker.data.brokerType}</span>
+            </div>
+            <div class="hidden md:block text-center text-sm font-medium">
+              {broker.data.maxLeverage}
+            </div>
+            <div class="hidden md:block text-center text-sm font-medium">
+              {broker.data.spreads}
+            </div>
+            <div class="text-center">
+              <span class={`font-bold text-lg ${broker.data.trustScore >= 90 ? 'text-green-600' : 'text-yellow-600'}`}>
+                {broker.data.trustScore}
+              </span>
+            </div>
+            <div class="hidden md:block text-center">
+              {broker.data.allowsEAs ? <span class="text-green-600 font-bold">Yes</span> : <span class="text-red-500 font-bold">No</span>}
+            </div>
+          </a>
+        )) : (
+          <div class="p-12 text-center text-muted font-bold">No brokers audited yet.</div>
+        )}
+      </div>
+    </div>
+  </main>
+</BaseLayout>
