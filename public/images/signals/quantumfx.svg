@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="32" fill="#533afd" fill-opacity="0.1"/>
+  <path d="M100 50 L120 70 L100 90 L80 70 Z" fill="#533afd" fill-opacity="0.2"/>
+  <path d="M100 80 L120 100 L100 120 L80 100 Z" fill="#533afd" fill-opacity="0.15"/>
+  <path d="M100 110 L120 130 L100 150 L80 130 Z" fill="#533afd" fill-opacity="0.1"/>
+  <text x="100" y="180" text-anchor="middle" font-family="system-ui" font-size="10" font-weight="bold" fill="#533afd">QuantumFX</text>
+</svg>

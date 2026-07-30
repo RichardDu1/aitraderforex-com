@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="32" fill="#533afd" fill-opacity="0.1"/>
+  <rect x="60" y="55" width="80" height="80" rx="8" fill="none" stroke="#533afd" stroke-width="3"/>
+  <path d="M80 85 L95 100 L120 70" stroke="#533afd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="100" y="180" text-anchor="middle" font-family="system-ui" font-size="10" font-weight="bold" fill="#533afd">DeepTrade</text>
+</svg>

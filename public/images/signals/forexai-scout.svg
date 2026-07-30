@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="32" fill="#533afd" fill-opacity="0.1"/>
+  <circle cx="100" cy="80" r="28" fill="none" stroke="#533afd" stroke-width="2" stroke-dasharray="4 4"/>
+  <circle cx="100" cy="80" r="12" fill="#533afd" fill-opacity="0.2"/>
+  <path d="M100 52 L100 45" stroke="#533afd" stroke-width="3" stroke-linecap="round"/>
+  <path d="M100 108 L100 115" stroke="#533afd" stroke-width="3" stroke-linecap="round"/>
+  <path d="M72 80 L65 80" stroke="#533afd" stroke-width="3" stroke-linecap="round"/>
+  <path d="M128 80 L135 80" stroke="#533afd" stroke-width="3" stroke-linecap="round"/>
+  <text x="100" y="180" text-anchor="middle" font-family="system-ui" font-size="10" font-weight="bold" fill="#533afd">ForexAI Scout</text>
+</svg>
