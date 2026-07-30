@@ -1,0 +1,148 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const items = await getCollection("strategies");
+  return items.map(item => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "Review",
+  "itemReviewed": { "@type": "Service", "name": item.data.title },
+  "reviewRating": { "@type": "Rating", "ratingValue": item.data.score, "bestRating": 10 },
+  "author": { "@type": "Organization", "name": "AI Trader Forex" }
+};
+---
+
+<BaseLayout title={`${item.data.title} Strategy Review — ${item.data.score}/10 | AI Trader Forex`} description={item.data.description} canonical={`https://aitraderforex.com/strategies/${item.id}/`} schema={{ type: "Review", data: schemaData }}>
+  <div class="bg-surface text-text min-h-screen py-24">
+    <div class="container max-w-6xl mx-auto px-6">
+      <!-- Breadcrumbs -->
+      <nav class="mb-10 text-sm text-muted font-bold tracking-widest uppercase">
+        <a href="/strategies/" class="hover:text-primary transition-colors">Strategies</a>
+        <span class="mx-3">/</span>
+        <span class="text-text">{item.data.title}</span>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Main Content -->
+        <article class="lg:col-span-8 order-2 lg:order-1">
+          <header class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+              {item.data.aiPowered && (
+                <span class="inline-block bg-primary/10 text-primary text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full">AI-POWERED</span>
+              )}
+              <span class={`inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
+                item.data.complexity === 'Beginner' ? 'bg-green-500/10 text-green-500' :
+                item.data.complexity === 'Intermediate' ? 'bg-yellow-500/10 text-yellow-500' :
+                'bg-red-500/10 text-red-500'
+              }`}>
+                {item.data.complexity}
+              </span>
+              <span class={`inline-block text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
+                item.data.riskLevel === 'Low' ? 'bg-green-500/10 text-green-500' :
+                item.data.riskLevel === 'Medium' ? 'bg-yellow-500/10 text-yellow-500' :
+                'bg-red-500/10 text-red-500'
+              }`}>
+                {item.data.riskLevel} Risk
+              </span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-text tracking-tighter mb-4">{item.data.title}</h1>
+            <p class="text-xl text-muted leading-relaxed max-w-3xl">{item.data.description}</p>
+          </header>
+
+          <div class="prose prose-invert prose-lg max-w-none prose-headings:text-text prose-p:text-muted prose-a:text-primary prose-strong:text-text">
+            <Content />
+          </div>
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="lg:col-span-4 order-1 lg:order-2">
+          <div class="bg-neutral border border-border p-8 rounded-3xl sticky top-24 shadow-xl space-y-8">
+            <div class="text-center">
+              <span class="block text-xs uppercase tracking-widest text-muted mb-2 font-bold">Strategy Score</span>
+              <div class={`text-6xl font-black ${(item.data.score || 0) >= 9 ? 'text-green-500' : (item.data.score || 0) >= 7 ? 'text-yellow-500' : 'text-muted'}`}>
+                {item.data.score}
+                <span class="text-2xl text-muted">/10</span>
+              </div>
+            </div>
+
+            <hr class="border-border" />
+
+            <div class="space-y-4">
+              <h3 class="font-black text-sm uppercase tracking-widest text-muted">Details</h3>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Complexity</span>
+                <span class="font-bold text-text">{item.data.complexity}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Asset Class</span>
+                <span class="font-bold text-text">{item.data.assetClass}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Time Frame</span>
+                <span class="font-bold text-text">{item.data.timeFrame}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Risk Level</span>
+                <span class={`font-bold ${
+                  item.data.riskLevel === 'Low' ? 'text-green-500' :
+                  item.data.riskLevel === 'Medium' ? 'text-yellow-500' : 'text-red-500'
+                }`}>{item.data.riskLevel}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">AI Powered</span>
+                <span class={item.data.aiPowered ? 'text-green-500 font-bold' : 'text-muted'}>
+                  {item.data.aiPowered ? '✓ Yes' : 'No'}
+                </span>
+              </div>
+            </div>
+
+            <hr class="border-border" />
+
+            {item.data.pros && item.data.pros.length > 0 && (
+              <div>
+                <h3 class="font-black text-sm uppercase tracking-widest text-green-500 mb-3">Pros</h3>
+                <ul class="space-y-2">
+                  {item.data.pros.map(pro => (
+                    <li class="flex items-start gap-2 text-sm text-text">
+                      <span class="text-green-500 font-black shrink-0">+</span> {pro}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {item.data.cons && item.data.cons.length > 0 && (
+              <div>
+                <h3 class="font-black text-sm uppercase tracking-widest text-red-500 mb-3">Cons</h3>
+                <ul class="space-y-2">
+                  {item.data.cons.map(con => (
+                    <li class="flex items-start gap-2 text-sm text-text">
+                      <span class="text-red-500 font-black shrink-0">−</span> {con}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {item.data.verdict && (
+              <div class="bg-primary/10 border border-primary/20 rounded-2xl p-5 text-center">
+                <span class="block text-xs uppercase tracking-widest text-primary font-black mb-1">Verdict</span>
+                <span class="font-bold text-text">{item.data.verdict}</span>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

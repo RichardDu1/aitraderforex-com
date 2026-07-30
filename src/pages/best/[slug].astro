@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const bestOfs = await getCollection('best-ofs');
+  return bestOfs.map((best) => ({
+    params: { slug: best.id },
+    props: { best },
+  }));
+}
+
+const { best } = Astro.props;
+const { data } = best;
+const sortedRankings = data.rankings?.sort((a: any, b: any) => a.rank - b.rank) || [];
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <a href="/best/" class="text-[#533afd] hover:underline mb-6 inline-block">&larr; All Rankings</a>
+      <h1 class="text-3xl font-bold mb-4">{data.title}</h1>
+      <p class="text-gray-400 mb-8 text-lg">{data.description}</p>
+
+      <div class="space-y-4">
+        {sortedRankings.map((item: any) => (
+          <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 flex items-center gap-6">
+            <div class="w-12 h-12 rounded-full bg-[#533afd] flex items-center justify-center flex-shrink-0 text-xl font-bold">
+              #{item.rank}
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-1">
+                <h3 class="text-lg font-semibold">{item.name}</h3>
+                <span class="bg-[#533afd]/20 text-[#533afd] text-sm px-2 py-0.5 rounded">{item.score}/10</span>
+              </div>
+              <p class="text-gray-400 text-sm">{item.highlight}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

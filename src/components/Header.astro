@@ -1,26 +1,33 @@
 ---
 // Header.astro — Sticky navigation with mobile hamburger menu
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Prop Firms', href: '/propfirms/' }
-,
-  { label: 'Blog', href: '/blog/' }
+  { label: 'Signals', href: '/signals/' },
+  { label: 'Strategies', href: '/strategies/' },
+  { label: 'Prop Firms', href: '/propfirms/' },
+  { label: 'Brokers', href: '/brokers/' },
+  { label: 'Comparisons', href: '/comparison/' },
+  { label: 'Best Of', href: '/best/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'About', href: '/about/' },
 ];
 ---
 
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-white/10">
-  <div class="container flex items-center justify-between h-16">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border/50 dark:bg-surface/95">
+  <div class="container max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2 font-bold text-xl text-text no-underline">
-      <span class="text-primary">AI</span>TraderForex
+    <a href="/" class="flex items-center gap-2 font-bold text-xl text-text no-underline shrink-0">
+      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/20">
+        <span class="text-white text-xs font-black">AI</span>
+      </div>
+      <span class="hidden sm:inline">Trader</span><span class="text-primary">Forex</span>
     </a>
 
     <!-- Desktop Nav -->
-    <nav class="hidden md:flex items-center gap-6" aria-label="Main navigation">
+    <nav class="hidden md:flex items-center gap-1" aria-label="Main navigation">
       {navItems.map((item) => (
         <a
           href={item.href}
-          class="text-sm font-medium text-muted hover:text-primary transition-colors"
+          class="text-sm font-medium text-muted hover:text-primary hover:bg-neutral/50 transition-colors px-3 py-2 rounded-lg"
         >
           {item.label}
         </a>
@@ -41,12 +48,12 @@ const navItems = [
   </div>
 
   <!-- Mobile Menu (hidden by default) -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-[#0a0a0a]">
-    <nav class="container flex flex-col py-4 gap-3" aria-label="Mobile navigation">
+  <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-surface">
+    <nav class="container max-w-7xl mx-auto flex flex-col py-4 gap-1 px-6" aria-label="Mobile navigation">
       {navItems.map((item) => (
         <a
           href={item.href}
-          class="text-sm font-medium text-muted hover:text-primary transition-colors py-1"
+          class="text-sm font-medium text-muted hover:text-primary hover:bg-neutral/50 transition-colors px-3 py-3 rounded-lg"
         >
           {item.label}
         </a>

@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const strategies = await getCollection('strategies');
+const sortedStrategies = strategies.sort((a, b) => (b.data.score || 0) - (a.data.score || 0));
+---
+
+<BaseLayout title="Trading Strategies - Reviews & Guides" description="Expert reviews of forex trading strategies. Compare AI-powered, manual, and automated strategies with verified performance data.">
+  <div class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold mb-4">Trading Strategies</h1>
+    <p class="text-gray-400 mb-8 text-lg">Expert-reviewed trading strategies. Find the right approach for your style and risk tolerance.</p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        sortedStrategies.map((strategy) => (
+          <a href={`/strategies/${strategy.id}/`} class="block bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-[#533afd]/40 transition-colors">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="text-2xl font-bold text-[#533afd]">{strategy.data.score}</span>
+              <div>
+                <h2 class="font-semibold">{strategy.data.title}</h2>
+              </div>
+            </div>
+            <p class="text-gray-400 text-sm mb-3">{strategy.data.description?.slice(0, 100)}...</p>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="bg-gray-800 px-2 py-1 rounded">{strategy.data.complexity}</span>
+              <span class="bg-gray-800 px-2 py-1 rounded">{strategy.data.riskLevel} Risk</span>
+              {strategy.data.aiPowered && <span class="bg-[#533afd]/20 text-[#533afd] px-2 py-1 rounded">AI-Powered</span>}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

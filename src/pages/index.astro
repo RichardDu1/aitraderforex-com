@@ -2,57 +2,256 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const allItems = await getCollection("propfirms");
-const topItems = allItems.slice(0, 3);
+const signals = await getCollection("signals");
+const strategies = await getCollection("strategies");
+const bestOfs = await getCollection("best-ofs");
 
-const pageTitle = "AI Trader Forex";
-const pageDescription = "Pass your prop firm challenges. We benchmark the best forex proprietary trading firms and brokers.";
+// Top signal providers sorted by score
+const topSignals = signals.sort((a, b) => (b.data.score || 0) - (a.data.score || 0)).slice(0, 6);
+const topStrategies = strategies.sort((a, b) => (b.data.score || 0) - (a.data.score || 0)).slice(0, 4);
+
+const pageTitle = "AI Trading Signals Reviewed — Verified, Tested, Ranked | AI Trader Forex";
+const pageDescription = "The only site dedicated to AI-powered forex trading signals and strategies — verified, tested, and ranked. Compare the best AI signal providers with real performance data.";
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription} canonical="https://aitraderforex.com/" schema={{ type: "WebSite", data: { description: pageDescription } }}>
-  <header class="bg-surface text-text py-32 relative overflow-hidden flex flex-col items-center text-center">
-    <div class="px-4 py-1.5 rounded-full border border-border bg-neutral text-sm font-bold mb-8 backdrop-blur-md text-green-500">
-      🔥 2026 TOP LEADERBOARD IS LIVE
+<BaseLayout title={pageTitle} description={pageDescription} canonical="https://aitraderforex.com/">
+  <!-- Hero Section -->
+  <header class="bg-surface text-text pt-32 pb-20 relative overflow-hidden flex flex-col items-center text-center">
+    <div class="absolute inset-0 -z-10 opacity-[0.05]" style="background-image: radial-gradient(#533afd 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-transparent to-transparent"></div>
+    
+    <div class="px-4 py-1.5 rounded-full border border-border bg-neutral text-sm font-bold mb-8 backdrop-blur-md text-primary">
+      🤖 {signals.length}+ AI SIGNAL PROVIDERS VERIFIED WITH REAL DATA
     </div>
-    <h1 class="text-4xl md:text-6xl font-bold text-text mb-6 tracking-tight">AI Trader Forex</h1>
+    <h1 class="text-4xl md:text-6xl font-bold text-text mb-6 tracking-tight max-w-4xl leading-tight">
+      AI Trading Signals — <span class="text-primary">Verified, Tested, Ranked</span>
+    </h1>
     <p class="text-xl md:text-2xl text-muted max-w-3xl mb-12 font-medium">
-      Pass your prop firm challenges. We benchmark the best forex proprietary trading firms and brokers.
+      The only site dedicated to AI-powered forex trading signals and strategies. No hype — just real performance data, transparency scores, and side-by-side comparisons.
     </p>
-    <div class="flex gap-4">
-      <a href="/propfirms/" class="bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform shadow-2xl">
-        View the Top List
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="/signals/" class="bg-primary text-white font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform shadow-2xl">
+        Browse All Signal Providers →
+      </a>
+      <a href="/how-we-rate/" class="text-text font-bold px-10 py-5 rounded-full border border-border transition-colors hover:bg-neutral">
+        How We Verify
       </a>
     </div>
   </header>
 
+  <!-- Top Signal Providers Table -->
   <section class="container max-w-6xl mx-auto px-6 py-24">
     <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-5xl font-black text-text mb-4">Top 3 Recommendations</h2>
-      <p class="text-muted text-lg">Top Prop Firms & Forex Brokers Reviews</p>
+      <span class="inline-block text-primary text-sm font-black uppercase tracking-widest mb-3">Top Rated</span>
+      <h2 class="text-3xl md:text-5xl font-black text-text mb-4">Best AI Signal Providers</h2>
+      <p class="text-muted text-lg max-w-2xl mx-auto">Ranked by our proprietary AI Signal Score — combining performance, transparency, and user satisfaction.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {topItems.length > 0 ? topItems.map((item, idx) => (
-        <a href={`/propfirms/${item.id}`} class="bg-neutral rounded-2xl border border-border p-8 hover:border-primary transition-colors group relative overflow-hidden shadow-xl">
-          <div class="absolute -right-10 -top-10 text-[150px] font-black text-muted opacity-10 group-hover:opacity-20 transition-colors z-0">
-            {idx + 1}
+    <div class="bg-neutral rounded-3xl border border-border overflow-hidden shadow-xl">
+      <div class="grid grid-cols-6 md:grid-cols-12 gap-4 p-6 bg-surface/50 border-b border-border text-xs font-black uppercase tracking-widest text-muted">
+        <div class="col-span-1 text-center">#</div>
+        <div class="col-span-3 md:col-span-4">Provider</div>
+        <div class="col-span-1 md:col-span-2 text-center hidden md:block">Platform</div>
+        <div class="col-span-1 text-center hidden md:block">Win Rate</div>
+        <div class="col-span-1 text-center">Score</div>
+        <div class="col-span-2 md:col-span-3 text-right">Review</div>
+      </div>
+
+      {topSignals.length > 0 ? topSignals.map((signal, idx) => (
+        <a href={`/signals/${signal.id}`} class="grid grid-cols-6 md:grid-cols-12 gap-4 p-6 items-center hover:bg-surface/50 transition-colors border-b border-border last:border-b-0 group">
+          <div class="col-span-1 text-center">
+            <span class={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-black ${idx < 3 ? 'bg-primary text-white' : 'bg-muted/20 text-muted'}`}>
+              {idx + 1}
+            </span>
           </div>
-          <div class="relative z-10">
-            <span class="inline-block bg-primary text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4">Featured</span>
-            <h3 class="text-3xl font-black text-text mb-2">{item.data.title || item.id}</h3>
-            <p class="text-muted leading-relaxed mb-6">{(item.data.description || "").substring(0, 100)}...</p>
-            <div class="text-green-500 font-bold group-hover:translate-x-2 transition-transform">Read Full Review →</div>
+          <div class="col-span-3 md:col-span-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg font-black text-primary shrink-0">
+                {signal.data.title.charAt(0)}
+              </div>
+              <div>
+                <h3 class="font-bold text-text group-hover:text-primary transition-colors">{signal.data.title}</h3>
+                <span class="text-xs text-muted">{signal.data.price}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-1 md:col-span-2 text-center hidden md:block">
+            <span class="text-sm text-muted">{signal.data.platform}</span>
+          </div>
+          <div class="col-span-1 text-center hidden md:block">
+            <span class="text-sm font-bold text-green-500">{signal.data.winRate || "—"}</span>
+          </div>
+          <div class="col-span-1 text-center">
+            <span class={`font-black text-lg ${(signal.data.score || 0) >= 9 ? 'text-green-500' : (signal.data.score || 0) >= 7 ? 'text-yellow-500' : 'text-muted'}`}>
+              {signal.data.score}/10
+            </span>
+          </div>
+          <div class="col-span-2 md:col-span-3 text-right">
+            <span class="text-primary font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">Read Review →</span>
           </div>
         </a>
       )) : (
-        <div class="col-span-3 text-center py-20 border-2 border-dashed border-border rounded-2xl text-muted font-bold">Running benchmarks...</div>
+        <div class="col-span-12 text-center py-20 border-2 border-dashed border-border rounded-2xl text-muted font-bold">
+          Signal provider reviews loading...
+        </div>
       )}
     </div>
-    
-    <div class="mt-16 text-center">
-      <a href="/propfirms/" class="inline-flex items-center gap-2 text-text font-bold px-8 py-4 rounded-full border border-border transition-colors hover:bg-neutral">
-        See All Reviews
+
+    <div class="mt-12 text-center">
+      <a href="/signals/" class="inline-flex items-center gap-2 text-text font-bold px-8 py-4 rounded-full border border-border transition-colors hover:bg-neutral">
+        View All {signals.length} Signal Providers
       </a>
+    </div>
+  </section>
+
+  <!-- How We Verify Section -->
+  <section id="how-we-verify" class="container max-w-6xl mx-auto px-6 py-24">
+    <div class="text-center mb-16">
+      <span class="inline-block text-primary text-sm font-black uppercase tracking-widest mb-3">Methodology</span>
+      <h2 class="text-3xl md:text-5xl font-black text-text mb-4">How We Verify AI Signals</h2>
+      <p class="text-muted text-lg max-w-2xl mx-auto">Every signal provider is scored on five pillars — no pay-to-play, no affiliate weighting.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl font-black mb-4">1</div>
+        <h3 class="text-lg font-black text-text mb-2">Performance</h3>
+        <p class="text-sm text-muted leading-relaxed">Live verified track record — win rate, drawdown, monthly return, risk-adjusted returns over minimum 90 days.</p>
+      </div>
+      <div class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl font-black mb-4">2</div>
+        <h3 class="text-lg font-black text-text mb-2">Transparency</h3>
+        <p class="text-sm text-muted leading-relaxed">Myfxbook/verified tracking, open trade history, real-time P&L — not cherry-picked screenshots.</p>
+      </div>
+      <div class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl font-black mb-4">3</div>
+        <h3 class="text-lg font-black text-text mb-2">AI Authenticity</h3>
+        <p class="text-sm text-muted leading-relaxed">Does the service actually use AI/ML? We verify claims — separating real automation from manual signals marketed as AI.</p>
+      </div>
+      <div class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl font-black mb-4">4</div>
+        <h3 class="text-lg font-black text-text mb-2">Value & Pricing</h3>
+        <p class="text-sm text-muted leading-relaxed">Monthly cost vs. average returns. Hidden fees, cancellation policies, and refund guarantees.</p>
+      </div>
+      <div class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl font-black mb-4">5</div>
+        <h3 class="text-lg font-black text-text mb-2">User Reviews</h3>
+        <p class="text-sm text-muted leading-relaxed">Aggregated sentiment from Trustpilot, Discord, Reddit — filtered for fake or incentivized reviews.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top Strategies -->
+  <section class="container max-w-6xl mx-auto px-6 py-24">
+    <div class="text-center mb-16">
+      <span class="inline-block text-primary text-sm font-black uppercase tracking-widest mb-3">Strategies</span>
+      <h2 class="text-3xl md:text-5xl font-black text-text mb-4">Top AI Trading Strategies</h2>
+      <p class="text-muted text-lg max-w-2xl mx-auto">Reviewed by complexity, asset class, and risk level — from beginner to advanced.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {topStrategies.length > 0 ? topStrategies.map((strategy) => (
+        <a href={`/strategies/${strategy.id}`} class="bg-neutral rounded-2xl border border-border p-6 hover:border-primary transition-colors group shadow-lg">
+          <div class="flex items-center gap-2 mb-4">
+            <span class={`inline-block text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${
+              strategy.data.complexity === 'Beginner' ? 'bg-green-500/10 text-green-500' :
+              strategy.data.complexity === 'Intermediate' ? 'bg-yellow-500/10 text-yellow-500' :
+              'bg-red-500/10 text-red-500'
+            }`}>
+              {strategy.data.complexity}
+            </span>
+            {strategy.data.aiPowered && (
+              <span class="inline-block bg-primary/10 text-primary text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-full">AI</span>
+            )}
+          </div>
+          <h3 class="text-xl font-black text-text mb-2 group-hover:text-primary transition-colors">{strategy.data.title}</h3>
+          <p class="text-sm text-muted leading-relaxed mb-4">{(strategy.data.description || "").substring(0, 100)}...</p>
+          <div class="flex items-center justify-between mt-auto pt-4 border-t border-border">
+            <span class="text-xs text-muted">{strategy.data.assetClass}</span>
+            <span class="font-bold text-primary">{strategy.data.score}/10</span>
+          </div>
+        </a>
+      )) : (
+        <div class="col-span-4 text-center py-20 border-2 border-dashed border-border rounded-2xl text-muted font-bold">
+          Strategy reviews loading...
+        </div>
+      )}
+    </div>
+
+    <div class="mt-12 text-center">
+      <a href="/strategies/" class="inline-flex items-center gap-2 text-text font-bold px-8 py-4 rounded-full border border-border transition-colors hover:bg-neutral">
+        View All Strategies
+      </a>
+    </div>
+  </section>
+
+  <!-- Best Of Categories -->
+  <section class="container max-w-6xl mx-auto px-6 py-24">
+    <div class="text-center mb-16">
+      <span class="inline-block text-primary text-sm font-black uppercase tracking-widest mb-3">Rankings</span>
+      <h2 class="text-3xl md:text-5xl font-black text-text mb-4">Best Of Rankings</h2>
+      <p class="text-muted text-lg max-w-2xl mx-auto">Curated category lists — find the best in every class.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="/best/best-forex-signals/" class="bg-neutral rounded-2xl border border-border p-8 hover:border-primary transition-colors group relative overflow-hidden shadow-xl">
+        <div class="absolute -right-8 -top-8 text-[100px] font-black text-muted opacity-5 group-hover:opacity-10 transition-opacity">🥇</div>
+        <h3 class="text-2xl font-black text-text mb-3">Best Forex Signals</h3>
+        <p class="text-muted text-sm mb-6">Top 10 AI-powered forex signal providers ranked by performance, transparency, and value.</p>
+        <span class="text-primary font-bold group-hover:translate-x-2 transition-transform inline-block">View Rankings →</span>
+      </a>
+      <a href="/best/best-ai-trading-strategies/" class="bg-neutral rounded-2xl border border-border p-8 hover:border-primary transition-colors group relative overflow-hidden shadow-xl">
+        <div class="absolute -right-8 -top-8 text-[100px] font-black text-muted opacity-5 group-hover:opacity-10 transition-opacity">🥇</div>
+        <h3 class="text-2xl font-black text-text mb-3">Best AI Trading Strategies</h3>
+        <p class="text-muted text-sm mb-6">Top-rated algorithmic and AI-driven trading strategies for forex traders of all levels.</p>
+        <span class="text-primary font-bold group-hover:translate-x-2 transition-transform inline-block">View Rankings →</span>
+      </a>
+      <a href="/best/best-prop-firms/" class="bg-neutral rounded-2xl border border-border p-8 hover:border-primary transition-colors group relative overflow-hidden shadow-xl">
+        <div class="absolute -right-8 -top-8 text-[100px] font-black text-muted opacity-5 group-hover:opacity-10 transition-opacity">🥇</div>
+        <h3 class="text-2xl font-black text-text mb-3">Best Prop Firms</h3>
+        <p class="text-muted text-sm mb-6">Top proprietary trading firms for funded trading — ranked by pass rate, payout speed, and rules.</p>
+        <span class="text-primary font-bold group-hover:translate-x-2 transition-transform inline-block">View Rankings →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="container max-w-6xl mx-auto px-6 py-24">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="text-4xl md:text-5xl font-black text-primary mb-2">{signals.length}+</div>
+        <div class="text-muted font-medium">Signal Providers Reviewed</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl md:text-5xl font-black text-primary mb-2">{strategies.length}+</div>
+        <div class="text-muted font-medium">Trading Strategies Analyzed</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl md:text-5xl font-black text-primary mb-2">{(await getCollection("propfirms")).length}+</div>
+        <div class="text-muted font-medium">Prop Firms Benchmarked</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl md:text-5xl font-black text-primary mb-2">{(await getCollection("brokers")).length}+</div>
+        <div class="text-muted font-medium">Brokers Audited</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="container max-w-4xl mx-auto px-6 py-24 text-center">
+    <div class="bg-gradient-to-br from-primary/10 to-transparent border border-border rounded-3xl p-12 md:p-16">
+      <h2 class="text-3xl md:text-5xl font-black text-text mb-6">Find Your Edge with AI</h2>
+      <p class="text-muted text-lg max-w-2xl mx-auto mb-10">
+        Join thousands of traders who use our verified reviews to choose the right AI signal provider. No hype, no fluff — just data-driven decisions.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/signals/" class="bg-primary text-white font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform shadow-2xl">
+          Start Comparing Signals
+        </a>
+        <a href="/newsletter/" class="text-text font-bold px-10 py-5 rounded-full border border-border transition-colors hover:bg-neutral">
+          Get Weekly AI Signal Updates
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>

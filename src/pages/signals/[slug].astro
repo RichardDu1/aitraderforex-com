@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const signals = await getCollection('signals');
+  return signals.map((signal) => ({
+    params: { slug: signal.id },
+    props: { signal },
+  }));
+}
+
+const { signal } = Astro.props;
+const { data } = signal;
+---
+
+<BaseLayout title={`${data.title} | AI Trading Signals Review`} description={data.description}>
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <!-- Back link -->
+      <a href="/signals/" class="text-[#533afd] hover:underline mb-6 inline-block">&larr; All Signals</a>
+
+      <!-- Header -->
+      <div class="flex items-start gap-6 mb-8">
+        <div class="w-24 h-24 rounded-xl bg-[#533afd]/10 flex items-center justify-center flex-shrink-0">
+          <span class="text-4xl font-bold text-[#533afd]">{data.score}</span>
+        </div>
+        <div class="flex-1">
+          <h1 class="text-3xl font-bold mb-2">{data.title}</h1>
+          <p class="text-gray-400 mb-4">{data.description}</p>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <span class="bg-gray-800 px-3 py-1 rounded-full">Platform: {data.platform}</span>
+            <span class="bg-gray-800 px-3 py-1 rounded-full">Price: {data.price}</span>
+            <span class="bg-gray-800 px-3 py-1 rounded-full">Win Rate: {data.winRate}</span>
+            <span class="bg-gray-800 px-3 py-1 rounded-full">Min Deposit: {data.minDeposit}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Score Breakdown -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div class="text-3xl font-bold text-[#533afd]">{data.score}</div>
+          <div class="text-sm text-gray-400">Overall Score</div>
+        </div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div class="text-3xl font-bold text-blue-400">{data.transparency}</div>
+          <div class="text-sm text-gray-400">Transparency /10</div>
+        </div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div class="text-3xl font-bold text-green-400">{data.performance}</div>
+          <div class="text-sm text-gray-400">Performance /10</div>
+        </div>
+        <div class="bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div class="text-lg font-semibold text-yellow-400">{data.winRate}</div>
+          <div class="text-sm text-gray-400">Win Rate</div>
+        </div>
+      </div>
+
+      <!-- Verdict -->
+      {data.verdict && (
+        <div class="bg-[#533afd]/10 border border-[#533afd]/30 rounded-xl p-6 mb-8">
+          <h2 class="text-xl font-semibold mb-2 text-[#533afd]">AI Verdict</h2>
+          <p class="text-gray-300">{data.verdict}</p>
+        </div>
+      )}
+
+      <!-- Pros/Cons -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        {data.pros && data.pros.length > 0 && (
+          <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <h2 class="text-lg font-semibold text-green-400 mb-3">Pros</h2>
+            <ul class="space-y-2">
+              {data.pros.map((pro: string) => (
+                <li class="flex items-start gap-2 text-gray-300">
+                  <span class="text-green-400 mt-1">+</span>
+                  <span>{pro}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {data.cons && data.cons.length > 0 && (
+          <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <h2 class="text-lg font-semibold text-red-400 mb-3">Cons</h2>
+            <ul class="space-y-2">
+              {data.cons.map((con: string) => (
+                <li class="flex items-start gap-2 text-gray-300">
+                  <span class="text-red-400 mt-1">-</span>
+                  <span>{con}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <!-- Bottom Line -->
+      {data.bottomLine && (
+        <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 mb-8">
+          <h2 class="text-lg font-semibold mb-2">Bottom Line</h2>
+          <p class="text-gray-300 text-lg">{data.bottomLine}</p>
+        </div>
+      )}
+
+      <!-- Content -->
+      <div class="prose prose-invert max-w-none">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
